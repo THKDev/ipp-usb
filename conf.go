@@ -39,6 +39,7 @@ type Configuration struct {
 	LogAllPrinterAttrs bool           // Get *all* printer attrs, for logging
 	ColorConsole       bool           // Enable ANSI colors on console
 	Quirks             QuirksSet      // Device quirks
+	Interface          int            // index of the interface to use
 }
 
 // Conf contains a global instance of program configuration
@@ -56,6 +57,7 @@ var Conf = Configuration{
 	LogMaxBackupFiles:  5,
 	LogAllPrinterAttrs: false,
 	ColorConsole:       true,
+	Interface:          -1,
 }
 
 // ConfLoad loads the program configuration
@@ -127,7 +129,8 @@ func confLoadInternal(path string) error {
 			case confMatchName(rec.Key, "dns-sd"):
 				err = rec.LoadNamedBool(&Conf.DNSSdEnable, "disable", "enable")
 			case confMatchName(rec.Key, "interface"):
-				err = rec.LoadNamedBool(&Conf.LoopbackOnly, "all", "loopback")
+				//				err = rec.LoadNamedBool(&Conf.LoopbackOnly, "all", "loopback")
+				err = rec.LoadInetInterface(&Conf.Interface)
 			case confMatchName(rec.Key, "ipv6"):
 				err = rec.LoadNamedBool(&Conf.IPV6Enable, "disable", "enable")
 			}
